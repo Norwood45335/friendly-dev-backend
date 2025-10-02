@@ -1,6 +1,7 @@
 export default [
   'strapi::logger',
   'strapi::errors',
+  'global::health', // Add health check middleware early in the chain
   {
     name: 'strapi::security',
     config: {

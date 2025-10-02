@@ -1,7 +1,7 @@
-module.exports = {
-  check: async (ctx) => {
-    try {
-      // Simple health check response
+module.exports = (config, { strapi }) => {
+  return async (ctx, next) => {
+    // Health check endpoint
+    if (ctx.request.url === '/health' && ctx.request.method === 'GET') {
       ctx.body = {
         status: 'ok',
         message: 'Strapi backend is running',
@@ -11,14 +11,10 @@ module.exports = {
         environment: process.env.NODE_ENV || 'development'
       };
       ctx.status = 200;
-    } catch (error) {
-      ctx.body = {
-        status: 'error',
-        message: 'Health check failed',
-        timestamp: new Date().toISOString(),
-        error: error.message
-      };
-      ctx.status = 500;
+      return;
     }
-  },
+    
+    // Continue to next middleware
+    await next();
+  };
 };
